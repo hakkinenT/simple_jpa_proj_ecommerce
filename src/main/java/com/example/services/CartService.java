@@ -30,7 +30,6 @@ public class CartService {
         Cart cart = new Cart();
         cart = cartRepository.save(cart);
 
-
         for (CartItemDTO ci : dto.getItems()) {
             Optional<Product> p = productRepository.findById(ci.getProduct().getId());
             CartItemPK pk = null;
@@ -46,8 +45,16 @@ public class CartService {
             cart.getItems().add(cartItem);
 
         }
-
-        cart = cartRepository.findById(cart.getId()).get();
+        cart.setTotal(calculateTotal(cart));
+        cart = cartRepository.update(cart);
+        
         return new CartDTO(cart, cart.getItems());
+    }
+
+    private double calculateTotal(Cart cart){
+        return cart.getItems()
+            .stream()
+            .map(CartItem::getSubtotal)
+            .reduce(0.0, Double::sum);
     }
 }

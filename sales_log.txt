@@ -4,3 +4,9 @@ Total da compra: null
 Itens comprados: 
 - Produto: Smartphone | Preço: R$ 1200,50 | Quantidade: 2 | Subtotal: R$ 2401,00
 - Produto: Notebook | Preço: R$ 3500,00 | Quantidade: 2 | Subtotal: R$ 7000,00
+_____Nova compra_____
+Data e Hora: 02/01/2025 17:36:44
+Total da compra: 9401.0
+Itens comprados: 
+- Produto: Smartphone | Preço: R$ 1200,50 | Quantidade: 2 | Subtotal: R$ 2401,00
+- Produto: Notebook | Preço: R$ 3500,00 | Quantidade: 2 | Subtotal: R$ 7000,00

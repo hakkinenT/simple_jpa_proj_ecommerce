@@ -35,28 +35,6 @@ CREATE TABLE tb_cart_item(
 	FOREIGN KEY (cart_id) REFERENCES tb_cart(id)
 );
 
--- trigger para calcular o valor do subtotal
-CREATE OR REPLACE FUNCTION calculate_total() RETURNS TRIGGER AS $$
-DECLARE
-	total_cart DECIMAL(10, 2);
-BEGIN
-	SELECT SUM(subtotal) INTO total_cart
-	FROM tb_cart_item
-	WHERE cart_id=NEW.cart_id;
-	
-	UPDATE tb_cart
-	SET total=total_cart
-	WHERE id=NEW.cart_id;
-	
-	RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trigger_calculate_total
-AFTER INSERT OR UPDATE ON tb_cart_item
-FOR EACH ROW
-EXECUTE FUNCTION calculate_total();
-
 -- INSERTS
 INSERT INTO tb_category (name) VALUES 
 ('Eletrônicos'),
@@ -112,9 +90,10 @@ INSERT INTO tb_product_category (product_id, category_id) VALUES
 (19, 1), -- Mouse Gamer em Eletrônicos
 (20, 6); -- Mesa de Jantar em Móveis
 
-INSERT INTO tb_cart DEFAULT VALUES; -- Cria carrinhos vazios
-INSERT INTO tb_cart DEFAULT VALUES;
-INSERT INTO tb_cart DEFAULT VALUES;
+INSERT INTO tb_cart (total) VALUES (5152.30);
+INSERT INTO tb_cart (total) VALUES (289.90);
+INSERT INTO tb_cart (total) VALUES (698.70);
+-- INSERT INTO tb_cart DEFAULT VALUES;
 
 INSERT INTO tb_cart_item (product_id, cart_id, quantity, subtotal) VALUES 
 (1, 1, 1, 1200.50), -- 1 Smartphone no Carrinho 1
