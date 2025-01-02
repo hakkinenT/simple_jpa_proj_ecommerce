@@ -1,0 +1,6 @@
+_____Nova compra_____
+Data e Hora: 28/12/2024 13:01:44
+Total da compra: null
+Itens comprados: 
+- Produto: Smartphone | Preço: R$ 1200,50 | Quantidade: 2 | Subtotal: R$ 2401,00
+- Produto: Notebook | Preço: R$ 3500,00 | Quantidade: 2 | Subtotal: R$ 7000,00

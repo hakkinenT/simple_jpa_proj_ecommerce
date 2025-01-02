@@ -1,0 +1,8 @@
+<aspectj>
+    <aspects>
+        <aspect name="com.example.aspects.ExceptionMonitorAspect"/>
+    </aspects>
+    <aspects>
+        <aspect name="com.example.aspects.SaleLoggerAspect"/>
+    </aspects>
+</aspectj>
