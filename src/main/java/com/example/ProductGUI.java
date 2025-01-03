@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
-import com.example.models.Category;
 import com.example.models.Product;
 import com.example.models.dto.ProductDTO;
 import com.example.models.views.ProductReport;
@@ -21,12 +20,14 @@ public class ProductGUI {
     public static void main(String[] args) {
         EntityManager entityManager = JPAUtils.getEntityManager();
         try {
+            
 
             ProductRepository productRepository = new ProductRepository(entityManager);
             ProductReportRepository productReportRepository = new ProductReportRepository(entityManager);
-            ProductService service = new ProductService(productRepository);
+            ProductService service = new ProductService(productRepository, productReportRepository);
 
-            /*ProductDTO product = new ProductDTO(null, "Notebook", 3000.0);
+            
+            ProductDTO product = new ProductDTO(null, "Notebook", 3000.0);
             product = service.create(product);
 
             System.out.println("INFORMAÇÕES DO PRODUTO CADASTRADO: ");
@@ -51,39 +52,50 @@ public class ProductGUI {
 
             System.out.println("EXCLUINDO PRODUTO COM ID " + product.getId() + "...");
             service.delete(product.getId());
-            System.out.println("Produto excluido com sucesso!");*/
+            System.out.println("Produto excluido com sucesso!");
+
+            System.out.println();
+
+            System.out.println("LISTANDO PRODUTOS CADASTRADOS: ");
+
             
-            /*List<Product> products = productRepository.findAllPaginated(10, 10);
-            for (Product product : products) {
-                System.out.println("ID: " + product.getId() + ", NAME: " + product.getName());
-                for (Category category : product.getCategories()) {
-                    System.out.println("CATEGORY: " + category.getName());
-                }
-            }*/
+            List<ProductDTO> products = service.findAllPaginated(10, 10);
+            for (ProductDTO p : products) {
+                System.out.println("ID: " + p.getId() + ", NAME: " + p.getName());
+                
+            }
 
+            System.out.println();
+            System.out.println("FILTRANDO PRODUTOS: ");
             // Filtros
-        String nome = "Notebook";
-        String categoria = "Eletrônicos";
-        Double minPreco = 1000.0;
-        Double maxPreco = 5000.0;
+            String nome = "Notebook";
+            String categoria = "Eletrônicos";
+            Double minPreco = 1000.0;
+            Double maxPreco = 5000.0;
 
-        // Combinar as especificações
-        Specification<Product> specification = Specification.allOf(
-            ProductSpecifications.hasName(nome),
-            ProductSpecifications.hasCategory(categoria),
-            ProductSpecifications.hasPriceBetween(minPreco, maxPreco)
-        );
+            // Combinar as especificações
+            Specification<Product> specification = Specification.allOf(
+                ProductSpecifications.hasName(nome),
+                ProductSpecifications.hasCategory(categoria),
+                ProductSpecifications.hasPriceBetween(minPreco, maxPreco)
+            );
         
-        //List<Product> produtos = productRepository.filterProducts(specification);
-        List<ProductReport> produtos = productReportRepository.findAll();
-        
-        // Gera o relatório
-            String filePath = "relatorio_produtos_view.pdf";
+            List<Product> pFiltered = productRepository.filterProducts(specification);
+            for (Product p : pFiltered) {
+                System.out.println("ID: " + p.getId() + ", NAME: " + p.getName());
+            }
+
+            System.out.println();
+            System.out.println("GERANDO RELATÓRIO DE PRODUTOS: ");
+            List<ProductReport> produtos = productReportRepository.findAll();
+            
+            // Gera o relatório
+            String filePath = "product_report.pdf";
             PDFGenerator.generateProductReport(filePath, produtos);
 
             System.out.println("Relatório gerado em: " + filePath);
-        //produtos.forEach(produto -> System.out.println(produto.getName() + ", " + produto.getPrice()));
-
+            //produtos.forEach(produto -> System.out.println(produto.getName() + ", " + produto.getPrice()));
+            
         } catch (Exception e) {
             e.printStackTrace();
         }finally{
